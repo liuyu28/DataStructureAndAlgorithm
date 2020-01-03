@@ -16,9 +16,9 @@ public class OneDirectionLinkedListStackTest {
             System.out.println("请输入操作");
             Scanner scanner = new Scanner(System.in);
             switch (scanner.next()){
-                /*case "size":
-                    System.out.println("队列中数据大小为："+stack.size()+"个");
-                    break;*/
+                case "size":
+                    System.out.println("栈中数据大小为："+stack.size()+"个");
+                    break;
                 case "pop" :
                     try {
                         System.out.println(stack.pop());
@@ -26,9 +26,10 @@ public class OneDirectionLinkedListStackTest {
                         System.out.println(e.getMessage());
                     }
                     break;
-                /*case "show" :
+                case "show" :
+                    System.out.println("栈遍历：");
                     stack.show();
-                    break;*/
+                    break;
                 case  "push" :
                     System.out.println("请输入要添加的整数");
                     scanner = new Scanner(System.in);
@@ -52,10 +53,7 @@ public class OneDirectionLinkedListStackTest {
 
 class OneDirectionLinkedListStack{
     //指向头结点，不能动
-    private Node first;
-    
-    private Node top;
-    
+    private Node first;  
     
     public OneDirectionLinkedListStack(){
         first = new Node(-1);
@@ -64,9 +62,12 @@ class OneDirectionLinkedListStack{
     public boolean isEmpty(){
         return null == first.getNext();
     }
+    
     public void push(int value){
         //找到最后的节点
         Node temp = first;
+        
+        //遍历找到最后一个元素
         while (true){
             if(null == temp.getNext()){
                 //temp是最后一个节点
@@ -82,7 +83,7 @@ class OneDirectionLinkedListStack{
     public int pop(){
         //找到最后节点出栈
         Node temp = first;
-        if(null == temp.getNext()){
+        if(isEmpty()){
             throw new RuntimeException("栈空~~");
         }
         //保留最后节点的前一个
@@ -96,6 +97,43 @@ class OneDirectionLinkedListStack{
         return temp.getNo();
     }
     
+    public int size(){
+        int size = 0;
+        //头节点不能移动，使用临时节点
+        Node temp = first;
+        while (null != temp.getNext()){
+            size ++;
+            temp = temp.getNext();
+        }
+        return size;
+    }
+    
+    //遍历栈元素,不改变原链表的顺序
+    public void show(){
+        if(isEmpty()){
+            System.out.println("栈空~~");
+            return;
+        }
+        //栈先进后出的特点，遍历顺序是链表从后先前
+        //需要先反转
+        Node head = new Node(-1);//新链表的头节点
+
+        Node temp = first;//遍历原节点时用的临时节点
+        Node node;
+        while (null != temp.getNext()){
+            temp = temp.getNext();
+            node = new Node(temp.getNo());
+            node.setNext(head.getNext());
+            head.setNext(node);
+        }
+
+        //遍历反向后的链表
+        temp = head;
+        while (null != temp.getNext()){
+            temp = temp.getNext();
+            System.out.printf("%d\n",temp.getNo());
+        }
+    }
 }
 
 class Node{
